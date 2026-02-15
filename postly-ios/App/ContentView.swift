@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    @EnvironmentObject var session: SessionManager
     @State private var isMenuOpen = false
 
     var body: some View {

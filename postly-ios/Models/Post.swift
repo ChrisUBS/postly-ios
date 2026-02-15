@@ -1,0 +1,24 @@
+//
+//  Post.swift
+//  Postly
+//
+//  Created by Christian Bonilla on 14/02/26.
+//
+
+import Foundation
+
+struct Post: Codable {
+    let _id: String
+    let title: String
+    let content: String
+    let author: Author
+    let slug: String
+    let createdAt: Date
+    let updatedAt: Date
+    let status: String
+    let readTime: Int
+    let views: Int
+    let likes: Int
+    let comments: [Comment]
+    let coverImage: String?
+}
