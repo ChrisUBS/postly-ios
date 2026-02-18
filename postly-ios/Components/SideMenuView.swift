@@ -9,7 +9,8 @@ import SwiftUI
 
 struct SideMenuView: View {
     @Binding var isMenuOpen: Bool
-    @State private var isLoggedIn = false
+    @Binding var showAuthSheet: Bool
+    @EnvironmentObject var session: SessionManager
 
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
@@ -34,18 +35,31 @@ struct SideMenuView: View {
             Spacer()
 
             // Login button
-            Button(action: {
-                print("Login action")
-            }) {
-                Text("Log In")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(12)
+            if session.isAuthenticated {
+                Button {
+                    session.logout()
+                    isMenuOpen = false
+                } label: {
+                    Text("Log Out")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.red)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                }
+            } else {
+                Button {
+                    isMenuOpen = false
+                    showAuthSheet = true
+                } label: {
+                    Text("Log In")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(12)
+                }
             }
-            .padding(.bottom, 40)
-
         }
         .padding(.horizontal)
         .frame(width: 280, alignment: .leading)

@@ -9,6 +9,7 @@ enum Endpoint {
     
     // MARK: - Auth
     case loginEmail
+    case registerEmail
     case checkAuth
     
     // MARK: - Posts
@@ -27,6 +28,9 @@ enum Endpoint {
             
         case .loginEmail:
             return "auth/login/email"
+            
+        case .registerEmail:
+            return "auth/register"
             
         case .checkAuth:
             return "auth/check"

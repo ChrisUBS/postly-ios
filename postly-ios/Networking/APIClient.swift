@@ -11,10 +11,22 @@ final class APIClient {
     
     static let shared = APIClient()
     
-    private let baseURL = URL(string: "http://localhost:5000/api")!
+    private let baseURL: URL
     private let session = URLSession.shared
     
-    private init() {}
+    private init() {
+        let configuredURL: URL = {
+            if
+                let baseURLString = Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String,
+                let url = URL(string: baseURLString)
+            {
+                return url
+            } else {
+                fatalError("BASE_URL not configured properly")
+            }
+        }()
+        self.baseURL = configuredURL
+    }
     
     func request<T: Decodable>(
         endpoint: Endpoint,

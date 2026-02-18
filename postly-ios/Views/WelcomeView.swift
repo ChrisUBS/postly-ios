@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct WelcomeView: View {
-    @State private var isLoggedIn: Bool = false
+    @EnvironmentObject var session: SessionManager
+    @Binding var showAuthSheet: Bool
 
     var body: some View {
         ZStack {
@@ -68,7 +69,7 @@ struct WelcomeView: View {
                     .padding(.horizontal)
 
                     // MARK: - Main Button
-                    if isLoggedIn {
+                    if session.isAuthenticated {
                         Button(action: {
                             // Navigation to posts
                         }) {
@@ -83,7 +84,7 @@ struct WelcomeView: View {
                         .padding(.horizontal)
                     } else {
                         Button(action: {
-                            // Action "Sign In"
+                            showAuthSheet = true
                         }) {
                             Label("Join Now", systemImage: "pencil.tip")
                                 .font(.title3)
@@ -128,11 +129,5 @@ struct FeatureCard: View {
         .background(Color.white)
         .cornerRadius(16)
         .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
-    }
-}
-
-struct WelcomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        WelcomeView()
     }
 }

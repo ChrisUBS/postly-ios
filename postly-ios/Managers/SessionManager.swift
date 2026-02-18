@@ -44,6 +44,27 @@ final class SessionManager: ObservableObject {
         isLoading = false
     }
     
+    // MARK: - Register
+
+    func register(name: String, email: String, password: String) async {
+        isLoading = true
+        
+        do {
+            let response = try await authService.register(
+                name: name,
+                email: email,
+                password: password
+            )
+            
+            user = response.user
+            
+        } catch {
+            print("Register error:", error)
+        }
+        
+        isLoading = false
+    }
+    
     // MARK: - Check existing session
     
     func checkSession() async {
