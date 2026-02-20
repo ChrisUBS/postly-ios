@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WelcomeView: View {
     @EnvironmentObject var session: SessionManager
+    @Binding var selectedScreen: Screen?
     @Binding var showAuthSheet: Bool
 
     var body: some View {
@@ -71,7 +72,7 @@ struct WelcomeView: View {
                     // MARK: - Main Button
                     if session.isAuthenticated {
                         Button(action: {
-                            // Navigation to posts
+                            selectedScreen = .posts
                         }) {
                             Label("Explore Posts", systemImage: "bubble.left.and.bubble.right")
                                 .font(.title3)

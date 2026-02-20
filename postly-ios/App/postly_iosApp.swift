@@ -26,8 +26,10 @@ struct postly_iosApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(session)
+            NavigationStack {
+                ContentView()
+                    .environmentObject(session)
+            }
         }
 //        .modelContainer(sharedModelContainer)
     }

@@ -10,7 +10,9 @@ import SwiftUI
 struct SideMenuView: View {
     @Binding var isMenuOpen: Bool
     @Binding var showAuthSheet: Bool
+    @Binding var selectedScreen: Screen?
     @EnvironmentObject var session: SessionManager
+    @State private var goToPosts = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
@@ -27,10 +29,20 @@ struct SideMenuView: View {
             Divider()
 
             // Home
-            MenuItem(icon: "house", text: "Home")
+            Button {
+                selectedScreen = .home
+                isMenuOpen = false
+            } label: {
+                MenuItem(icon: "house", text: "Home")
+            }
 
             // Posts
-            MenuItem(icon: "bubble.left", text: "Posts")
+            Button {
+                selectedScreen = .posts
+                isMenuOpen = false
+            } label: {
+                MenuItem(icon: "bubble.left", text: "Posts")
+            }
 
             Spacer()
 
@@ -65,6 +77,9 @@ struct SideMenuView: View {
         .frame(width: 280, alignment: .leading)
         .frame(maxHeight: .infinity)
         .background(Color.white)
+        .navigationDestination(isPresented: $goToPosts) {
+            PostsView()
+        }
     }
 }
 

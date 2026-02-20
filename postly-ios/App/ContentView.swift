@@ -13,31 +13,36 @@ struct ContentView: View {
     
     @State private var isMenuOpen = false
     @State private var showAuthSheet = false
+    @State private var selectedScreen: Screen?
 
     var body: some View {
-        ZStack {
-            // Main content
-            VStack(spacing: 0) {
-                NavbarView(isMenuOpen: $isMenuOpen)
-                    .padding(.bottom, 10)
+        NavigationStack {
+            ZStack {
+                VStack(spacing: 0) {
+                    NavbarView(isMenuOpen: $isMenuOpen)
+                        .padding(.bottom, 10)
 
-                ScrollView {
-                    WelcomeView(showAuthSheet: $showAuthSheet)
+                    ScrollView {
+                        if selectedScreen == .posts {
+                            PostsView()
+                        } else {
+                            WelcomeView(selectedScreen: $selectedScreen, showAuthSheet: $showAuthSheet)
+                        }
+                    }
+                    .ignoresSafeArea(.container, edges: .bottom)
                 }
-                .ignoresSafeArea(.container, edges: .bottom)
-            }
 
-            // Side Menu overlay
-            if isMenuOpen {
-                HStack(spacing: 0) {
-                    SideMenuView(
-                        isMenuOpen: $isMenuOpen,
-                        showAuthSheet: $showAuthSheet
-                    )
-
-                    Spacer()
+                if isMenuOpen {
+                    HStack(spacing: 0) {
+                        SideMenuView(
+                            isMenuOpen: $isMenuOpen,
+                            showAuthSheet: $showAuthSheet,
+                            selectedScreen: $selectedScreen
+                        )
+                        Spacer()
+                    }
+                    .transition(.move(edge: .leading))
                 }
-                .transition(.move(edge: .leading))
             }
         }
         .sheet(
@@ -46,13 +51,7 @@ struct ContentView: View {
                 set: { showAuthSheet = $0 }
             )
         ) {
-            AuthSheetView()
-                .environmentObject(session)
+            AuthSheetView().environmentObject(session)
         }
     }
-}
-
-
-#Preview {
-    ContentView()
 }
