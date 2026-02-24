@@ -17,7 +17,11 @@ enum Endpoint {
     case getPost(id: String)
     case createPost
     case likePost(id: String)
-    
+
+    // MARK: - User
+    case getMyPosts
+    case deletePost(id: String)
+
     // MARK: - Comments
     case getComments(postId: String)
     case createComment(postId: String)
@@ -46,6 +50,12 @@ enum Endpoint {
             
         case .likePost(let id):
             return "posts/\(id)/like"
+            
+        case .getMyPosts:
+            return "users/me/posts"
+            
+        case .deletePost(let id):
+            return "posts/\(id)"
             
         case .getComments(let postId):
             return "posts/\(postId)/comments"

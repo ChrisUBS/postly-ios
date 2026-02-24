@@ -9,6 +9,8 @@ import Foundation
 
 final class PostService {
     
+    static let shared = PostService()
+    
     func getAllPosts(page: Int = 1, limit: Int = 10) async throws -> PaginatedResponse<Post> {
         try await APIClient.shared.request(
             endpoint: .getPosts(page: page, limit: limit)
@@ -18,6 +20,21 @@ final class PostService {
     func getPostById(id: String) async throws -> Post {
         try await APIClient.shared.request(
             endpoint: .getPost(id: id)
+        )
+    }
+    
+    func getMyPosts() async throws -> PaginatedResponse<Post> {
+        try await APIClient.shared.request(
+            endpoint: .getMyPosts,
+            requiresAuth: true
+        )
+    }
+    
+    func deletePost(id: String) async throws {
+        let _: EmptyResponse = try await APIClient.shared.request(
+            endpoint: .deletePost(id: id),
+            method: "DELETE",
+            requiresAuth: true
         )
     }
     

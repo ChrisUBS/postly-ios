@@ -29,6 +29,18 @@ final class SessionManager: ObservableObject {
         user != nil
     }
     
+    var userName: String {
+        user?.name ?? "User"
+    }
+
+    var email: String {
+        user?.email ?? ""
+    }
+
+    var profilePictureURL: String? {
+        user?.profilePicture
+    }
+    
     // MARK: - Login
     
     func login(email: String, password: String) async {

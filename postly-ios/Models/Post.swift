@@ -7,8 +7,9 @@
 
 import Foundation
 
-struct Post: Codable {
+struct Post: Codable, Identifiable {
     let _id: String
+    var id: String { _id }
     let title: String
     let content: String
     let author: Author
@@ -21,4 +22,11 @@ struct Post: Codable {
     let likes: Int
     let comments: [Comment]
     let coverImage: String?
+    
+    var createdAtFormatted: String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        return formatter.string(from: createdAt)
+    }
 }

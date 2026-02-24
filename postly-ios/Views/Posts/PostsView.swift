@@ -20,7 +20,7 @@ struct PostsView: View {
                     VStack(spacing: 8) {
                         Text("Recent Posts")
                             .font(.largeTitle.weight(.bold))
-                        Text("Explore the most interesting conversations on Postly")
+                        Text("Explore the most interesting conversations")
                             .foregroundColor(.gray)
                     }
                     .padding(.top, 20)

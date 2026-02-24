@@ -12,7 +12,6 @@ struct SideMenuView: View {
     @Binding var showAuthSheet: Bool
     @Binding var selectedScreen: Screen?
     @EnvironmentObject var session: SessionManager
-    @State private var goToPosts = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 24) {
@@ -28,14 +27,17 @@ struct SideMenuView: View {
 
             Divider()
 
-            // Home
-            Button {
-                selectedScreen = .home
-                isMenuOpen = false
-            } label: {
-                MenuItem(icon: "house", text: "Home")
+            // MARK: - Visible only when logged out
+            if !session.isAuthenticated {
+                // Home
+                Button {
+                    selectedScreen = .home
+                    isMenuOpen = false
+                } label: {
+                    MenuItem(icon: "house", text: "Home")
+                }
             }
-
+            // MARK: - Always visible
             // Posts
             Button {
                 selectedScreen = .posts
@@ -44,9 +46,27 @@ struct SideMenuView: View {
                 MenuItem(icon: "bubble.left", text: "Posts")
             }
 
+            // MARK: - Visible only when logged in
+            if session.isAuthenticated {
+                // Create Post
+                Button {
+                    selectedScreen = .createPost
+                    isMenuOpen = false
+                } label: {
+                    MenuItem(icon: "pencil.tip", text: "Create Post")
+                }
+                // My Profile
+                Button {
+                    selectedScreen = .profile
+                    isMenuOpen = false
+                } label: {
+                    MenuItem(icon: "person.crop.circle", text: "My Profile")
+                }
+            }
+
             Spacer()
 
-            // Login button
+            // MARK: - Login or logout
             if session.isAuthenticated {
                 Button {
                     session.logout()
@@ -77,9 +97,6 @@ struct SideMenuView: View {
         .frame(width: 280, alignment: .leading)
         .frame(maxHeight: .infinity)
         .background(Color.white)
-        .navigationDestination(isPresented: $goToPosts) {
-            PostsView()
-        }
     }
 }
 

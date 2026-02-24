@@ -90,7 +90,7 @@ struct PostCardView: View {
                 .foregroundColor(.gray)
             }
             .padding(.horizontal)
-            .padding(.bottom, 8)
+            .padding(.vertical, 8)
         }
         .background(Color.white)
         .cornerRadius(12)

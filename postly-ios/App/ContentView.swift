@@ -13,20 +13,42 @@ struct ContentView: View {
     
     @State private var isMenuOpen = false
     @State private var showAuthSheet = false
-    @State private var selectedScreen: Screen?
+    @State private var selectedScreen: Screen? = .home
 
     var body: some View {
         NavigationStack {
             ZStack {
+
                 VStack(spacing: 0) {
+
                     NavbarView(isMenuOpen: $isMenuOpen)
                         .padding(.bottom, 10)
 
                     ScrollView {
-                        if selectedScreen == .posts {
+                        switch selectedScreen {
+
+                        case .posts:
                             PostsView()
-                        } else {
-                            WelcomeView(selectedScreen: $selectedScreen, showAuthSheet: $showAuthSheet)
+                                .navigationBarHidden(true)
+
+                        case .createPost:
+                            CreatePostView(selectedScreen: $selectedScreen)
+                                .navigationBarHidden(true)
+                            
+                        case .profile:
+                            ProfileView(selectedScreen: $selectedScreen)
+                                .navigationBarHidden(true)
+
+                        default:
+                            if session.isAuthenticated {
+                                PostsView()
+                                    .navigationBarHidden(true)
+                            } else {
+                                WelcomeView(
+                                    selectedScreen: $selectedScreen,
+                                    showAuthSheet: $showAuthSheet
+                                )
+                            }
                         }
                     }
                     .ignoresSafeArea(.container, edges: .bottom)
@@ -51,7 +73,16 @@ struct ContentView: View {
                 set: { showAuthSheet = $0 }
             )
         ) {
-            AuthSheetView().environmentObject(session)
+            AuthSheetView()
+                .environmentObject(session)
+        }
+        .onChange(of: session.user) { newValue, oldValue in
+            if newValue != nil {
+                selectedScreen = .posts
+            }
+            else {
+                selectedScreen = .home
+            }
         }
     }
 }

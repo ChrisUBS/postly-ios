@@ -8,4 +8,8 @@
 enum Screen {
     case home
     case posts
+    case profile
+    case createPost
+    case editPost(id: String)
+    case postDetail(slug: String)
 }
