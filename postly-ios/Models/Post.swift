@@ -19,8 +19,8 @@ struct Post: Codable, Identifiable {
     let status: String
     let readTime: Int
     let views: Int
-    let likes: Int
-    let comments: [Comment]
+    var likes: Int
+    var comments: [Comment]
     let coverImage: String?
     
     var createdAtFormatted: String {

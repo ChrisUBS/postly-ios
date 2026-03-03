@@ -18,6 +18,8 @@ enum Endpoint {
     case createPost
     case updatePost(id: String)
     case likePost(id: String)
+    case unlikePost(id: String)
+    case checkLike(id: String)
 
     // MARK: - User
     case getMyPosts
@@ -53,6 +55,12 @@ enum Endpoint {
             return "posts/\(id)"
             
         case .likePost(let id):
+            return "posts/\(id)/like"
+
+        case .unlikePost(let id):
+            return "posts/\(id)/like"
+
+        case .checkLike(let id):
             return "posts/\(id)/like"
             
         case .getMyPosts:

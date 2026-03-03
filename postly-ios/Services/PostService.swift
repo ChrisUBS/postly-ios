@@ -85,6 +85,25 @@ final class PostService {
             requiresAuth: true
         )
     }
+
+    func unlikePost(postId: String) async throws {
+        let _: EmptyResponse = try await APIClient.shared.request(
+            endpoint: .unlikePost(id: postId),
+            method: "DELETE",
+            requiresAuth: true
+        )
+    }
+
+    func checkLike(postId: String) async throws -> Bool {
+        let response: LikeStatusResponse = try await APIClient.shared.request(
+            endpoint: .checkLike(id: postId),
+            requiresAuth: true
+        )
+        return response.liked
+    }
 }
 
 struct EmptyResponse: Codable {}
+struct LikeStatusResponse: Codable {
+    let liked: Bool
+}

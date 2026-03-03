@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PostsView: View {
     
+    @EnvironmentObject var session: SessionManager
     @StateObject private var vm = PostsViewModel()
     
     var body: some View {
@@ -43,6 +44,7 @@ struct PostsView: View {
                             ForEach(vm.posts, id: \._id) { post in
                                 NavigationLink {
                                     PostDetailView(postId: post._id)
+                                        .environmentObject(session)
                                 } label: {
                                     PostCardView(post: post)
                                         .padding(.horizontal)
