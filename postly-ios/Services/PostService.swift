@@ -16,6 +16,12 @@ final class PostService {
             endpoint: .getPosts(page: page, limit: limit)
         )
     }
+
+    func searchPosts(query: String) async throws -> [Post] {
+        try await APIClient.shared.request(
+            endpoint: .searchPosts(query: query)
+        )
+    }
     
     func getPostById(id: String) async throws -> Post {
         try await APIClient.shared.request(

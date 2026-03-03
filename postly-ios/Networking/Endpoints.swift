@@ -5,6 +5,8 @@
 //  Created by Christian Bonilla on 14/02/26.
 //
 
+import Foundation
+
 enum Endpoint {
     
     // MARK: - Auth
@@ -14,6 +16,7 @@ enum Endpoint {
     
     // MARK: - Posts
     case getPosts(page: Int, limit: Int)
+    case searchPosts(query: String)
     case getPost(id: String)
     case createPost
     case updatePost(id: String)
@@ -44,6 +47,10 @@ enum Endpoint {
             
         case .getPosts(let page, let limit):
             return "posts?page=\(page)&limit=\(limit)"
+
+        case .searchPosts(let query):
+            let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? query
+            return "posts/search?q=\(encodedQuery)"
             
         case .getPost(let id):
             return "posts/\(id)"

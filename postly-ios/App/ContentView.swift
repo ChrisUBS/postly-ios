@@ -12,6 +12,7 @@ struct ContentView: View {
     @EnvironmentObject var session: SessionManager
     
     @State private var isMenuOpen = false
+    @State private var isSearchExpanded = false
     @State private var showAuthSheet = false
     @State private var selectedScreen: Screen? = .home
 
@@ -21,7 +22,15 @@ struct ContentView: View {
 
                 VStack(spacing: 0) {
 
-                    NavbarView(isMenuOpen: $isMenuOpen)
+                    NavbarView(
+                        isMenuOpen: $isMenuOpen,
+                        isSearchExpanded: $isSearchExpanded,
+                        selectedScreen: $selectedScreen,
+                        onSearchSubmit: { query in
+                            selectedScreen = .search(query: query)
+                            isMenuOpen = false
+                        }
+                    )
                         .padding(.bottom, 10)
 
                     ScrollView {
@@ -30,6 +39,14 @@ struct ContentView: View {
                         case .posts:
                             PostsView()
                                 .navigationBarHidden(true)
+                            
+                        case .search(let query):
+                            SearchResultsView(
+                                query: query,
+                                selectedScreen: $selectedScreen,
+                                isSearchExpanded: $isSearchExpanded
+                            )
+                            .navigationBarHidden(true)
 
                         case .createPost:
                             CreatePostView(selectedScreen: $selectedScreen)
