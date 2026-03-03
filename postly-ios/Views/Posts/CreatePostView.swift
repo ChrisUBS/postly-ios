@@ -16,7 +16,8 @@ struct CreatePostView: View {
     @State private var content = ""
     @State private var status: String = "published"
     @State private var loading = false
-    @State private var errorMessage: String?
+    @State private var alertMessage = ""
+    @State private var showAlert = false
 
     // Pexels
     @State private var recommendedImages: [PexelsPhoto] = []
@@ -44,13 +45,6 @@ struct CreatePostView: View {
                 .frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
-
-                // MARK: Error
-                if let error = errorMessage {
-                    Text(error)
-                        .foregroundColor(.red)
-                        .padding(.horizontal)
-                }
 
                 // MARK: Title
                 VStack(alignment: .leading) {
@@ -195,6 +189,7 @@ struct CreatePostView: View {
                 HStack {
                     Button {
                         clearForm()
+                        selectedScreen = .profile
                     } label: {
                         Text("Cancel")
                             .padding()
@@ -222,6 +217,11 @@ struct CreatePostView: View {
         }
         .onChange(of: title) { newValue, old in
             debounceSearch()
+        }
+        .alert("Notice", isPresented: $showAlert) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(alertMessage)
         }
     }
 
@@ -274,7 +274,8 @@ struct CreatePostView: View {
     private func createPost() async {
         if title.trimmingCharacters(in: .whitespaces).isEmpty ||
             content.trimmingCharacters(in: .whitespaces).isEmpty {
-            errorMessage = "Title and content are required"
+            alertMessage = "Title and content are required"
+            showAlert = true
             return
         }
 
@@ -291,10 +292,11 @@ struct CreatePostView: View {
             )
 
             clearForm()
-            selectedScreen = .posts
+            selectedScreen = .profile
 
         } catch {
-            errorMessage = "Error creating post"
+            alertMessage = "Error creating post"
+            showAlert = true
         }
 
         loading = false

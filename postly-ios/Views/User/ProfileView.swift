@@ -12,7 +12,7 @@ struct ProfileView: View {
     @State private var posts: [Post] = []
     @State private var loading = true
     @State private var error: String?
-    @State private var showingDeleteAlert: Bool = false
+    @State private var postPendingDelete: Post?
     @Binding var selectedScreen: Screen?
     
     var body: some View {
@@ -197,7 +197,7 @@ extension ProfileView {
                 
                 // Delete Button
                 Button {
-                    showingDeleteAlert = true
+                    postPendingDelete = post
                 } label: {
                     Image(systemName: "trash")
                         .padding(8)
@@ -227,15 +227,23 @@ extension ProfileView {
             Divider()
         }
         .padding(.vertical, 4)
-        .alert("Are you sure you want to delete this post?",
-               isPresented: $showingDeleteAlert) {
-
-            Button("Cancel", role: .cancel) { }
-
-            Button("Delete", role: .destructive) {
-                deletePost(post.id)
+        .alert(
+            "Are you sure you want to delete this post?",
+            isPresented: Binding(
+                get: { postPendingDelete != nil },
+                set: { if !$0 { postPendingDelete = nil } }
+            )
+        ) {
+            Button("Cancel", role: .cancel) {
+                postPendingDelete = nil
             }
-
+            
+            Button("Delete", role: .destructive) {
+                if let postId = postPendingDelete?.id {
+                    deletePost(postId)
+                }
+                postPendingDelete = nil
+            }
         } message: {
             Text("This action cannot be undone.")
         }

@@ -56,6 +56,27 @@ final class PostService {
             requiresAuth: true
         )
     }
+
+    func updatePost(id: String, title: String, content: String, status: String? = nil, coverImage: String? = nil) async throws -> Post {
+        
+        var bodyDict: [String: Any] = [
+            "title": title,
+            "content": content,
+            "coverImage": coverImage ?? NSNull()
+        ]
+        if let status {
+            bodyDict["status"] = status
+        }
+        
+        let body = try JSONSerialization.data(withJSONObject: bodyDict)
+        
+        return try await APIClient.shared.request(
+            endpoint: .updatePost(id: id),
+            method: "PUT",
+            body: body,
+            requiresAuth: true
+        )
+    }
     
     func likePost(postId: String) async throws {
         let _: EmptyResponse = try await APIClient.shared.request(

@@ -34,6 +34,10 @@ struct ContentView: View {
                         case .createPost:
                             CreatePostView(selectedScreen: $selectedScreen)
                                 .navigationBarHidden(true)
+
+                        case .editPost(let id):
+                            EditPostView(postId: id, selectedScreen: $selectedScreen)
+                                .navigationBarHidden(true)
                             
                         case .profile:
                             ProfileView(selectedScreen: $selectedScreen)
