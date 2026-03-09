@@ -33,47 +33,45 @@ struct ContentView: View {
                     )
                         .padding(.bottom, 10)
 
-                    ScrollView {
-                        switch selectedScreen {
-
-                        case .posts:
+                    switch selectedScreen {
+                        
+                    case .posts:
+                        PostsView()
+                            .navigationBarHidden(true)
+                        
+                    case .search(let query):
+                        SearchResultsView(
+                            query: query,
+                            selectedScreen: $selectedScreen,
+                            isSearchExpanded: $isSearchExpanded
+                        )
+                        .navigationBarHidden(true)
+                        
+                    case .createPost:
+                        CreatePostView(selectedScreen: $selectedScreen)
+                            .navigationBarHidden(true)
+                        
+                    case .editPost(let id):
+                        EditPostView(postId: id, selectedScreen: $selectedScreen)
+                            .navigationBarHidden(true)
+                        
+                    case .profile:
+                        ProfileView(selectedScreen: $selectedScreen)
+                            .navigationBarHidden(true)
+                        
+                    default:
+                        if session.isAuthenticated {
                             PostsView()
                                 .navigationBarHidden(true)
-                            
-                        case .search(let query):
-                            SearchResultsView(
-                                query: query,
+                        } else {
+                            WelcomeView(
                                 selectedScreen: $selectedScreen,
-                                isSearchExpanded: $isSearchExpanded
+                                showAuthSheet: $showAuthSheet
                             )
-                            .navigationBarHidden(true)
-
-                        case .createPost:
-                            CreatePostView(selectedScreen: $selectedScreen)
-                                .navigationBarHidden(true)
-
-                        case .editPost(let id):
-                            EditPostView(postId: id, selectedScreen: $selectedScreen)
-                                .navigationBarHidden(true)
-                            
-                        case .profile:
-                            ProfileView(selectedScreen: $selectedScreen)
-                                .navigationBarHidden(true)
-
-                        default:
-                            if session.isAuthenticated {
-                                PostsView()
-                                    .navigationBarHidden(true)
-                            } else {
-                                WelcomeView(
-                                    selectedScreen: $selectedScreen,
-                                    showAuthSheet: $showAuthSheet
-                                )
-                            }
                         }
                     }
-                    .ignoresSafeArea(.container, edges: .bottom)
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
 
                 if isMenuOpen {
                     HStack(spacing: 0) {

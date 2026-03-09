@@ -48,6 +48,7 @@ struct PostsView: View {
                                 } label: {
                                     PostCardView(post: post)
                                         .padding(.horizontal)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
                                 }
                                 .buttonStyle(.plain)
                             }

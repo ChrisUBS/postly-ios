@@ -37,19 +37,20 @@ struct PostDetailView: View {
                         
                         if let cover = post.coverImage, let url = URL(string: cover) {
                             ZStack(alignment: .bottomLeading) {
+                                Rectangle()
+                                    .fill(Color(.systemGray6))
+                                    .frame(height: 300)
+                                
                                 AsyncImage(url: url) { phase in
                                     switch phase {
                                     case .success(let image):
                                         image
                                             .resizable()
-                                            .scaledToFill()
-                                            .frame(maxWidth: 400)
-                                            .frame(height: 300)
-                                            .clipped()
+                                            .scaledToFit()
+                                            .frame(maxWidth: .infinity, maxHeight: 300, alignment: .center)
                                     default:
-                                        Rectangle()
-                                            .fill(.gray.opacity(0.2))
-                                            .frame(height: 300)
+                                        ProgressView()
+                                            .frame(maxWidth: .infinity, maxHeight: 300, alignment: .center)
                                     }
                                 }
                                 
@@ -68,6 +69,8 @@ struct PostDetailView: View {
                                     .background(Color.black.opacity(0.8))
                                 }
                             }
+                            .frame(maxWidth: .infinity)
+                            .clipped()
                         }
                         
                         VStack(alignment: .leading, spacing: 16) {

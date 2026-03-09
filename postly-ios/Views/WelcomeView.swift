@@ -13,92 +13,99 @@ struct WelcomeView: View {
     @Binding var showAuthSheet: Bool
 
     var body: some View {
-        ZStack {
-            // Background
-            LinearGradient(
-                gradient: Gradient(colors: [Color.blue.opacity(0.15), Color.blue.opacity(0.30)]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+        GeometryReader { proxy in
+            ZStack(alignment: .top) {
+                LinearGradient(
+                    gradient: Gradient(colors: [Color.blue.opacity(0.15), Color.blue.opacity(0.30)]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .ignoresSafeArea()
+                
+                ScrollView {
+                    VStack(spacing: 32) {
 
-            ScrollView {
-                VStack(spacing: 32) {
+                        // MARK: - Title
+                        VStack(spacing: 16) {
+                            HStack(spacing: 12) {
+                                Image(systemName: "bubble.left.and.bubble.right.fill")
+                                    .font(.system(size: 50))
+                                    .foregroundColor(.blue)
 
-                    // MARK: - Title
-                    VStack(spacing: 16) {
-                        HStack(spacing: 12) {
-                            Image(systemName: "bubble.left.and.bubble.right.fill")
-                                .font(.system(size: 50))
-                                .foregroundColor(.blue)
+                                Text("Welcome to Postly")
+                                    .font(.system(size: 40, weight: .bold))
+                                    .foregroundColor(Color(.darkGray))
+                            }
 
-                            Text("Welcome to Postly")
-                                .font(.system(size: 40, weight: .bold))
-                                .foregroundColor(Color(.darkGray))
+                            Text("A platform to share ideas, connect with people, and explore fascinating conversations all in one place.")
+                                .font(.title3)
+                                .foregroundColor(.gray)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: 500)
+                                .padding(.horizontal, 20)
                         }
 
-                        Text("A platform to share ideas, connect with people, and explore fascinating conversations all in one place.")
-                            .font(.title3)
-                            .foregroundColor(.gray)
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: 300)
-                    }
-
-                    // MARK: - Cards
-                    VStack(spacing: 20) {
-                        FeatureCard(
-                            icon: "pencil.tip",
-                            iconColor: .blue,
-                            title: "Create Posts",
-                            description: "Share your thoughts, stories, and ideas with our community."
-                        )
-
-                        FeatureCard(
-                            icon: "bubble.left.and.text.bubble.right.fill",
-                            iconColor: .green,
-                            title: "Explore Conversations",
-                            description: "Discover amazing posts and participate in relevant conversations."
-                        )
-
-                        FeatureCard(
-                            icon: "person.3.fill",
-                            iconColor: .purple,
-                            title: "Connect",
-                            description: "Meet people with similar interests and expand your network."
-                        )
-                    }
-                    .padding(.horizontal)
-
-                    // MARK: - Main Button
-                    if session.isAuthenticated {
-                        Button(action: {
-                            selectedScreen = .posts
-                        }) {
-                            Label("Explore Posts", systemImage: "bubble.left.and.bubble.right")
-                                .font(.title3)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(12)
+                        // MARK: - Cards
+                        VStack(spacing: 20) {
+                            FeatureCard(
+                                icon: "pencil.tip",
+                                iconColor: .blue,
+                                title: "Create Posts",
+                                description: "Share your thoughts, stories, and ideas with our community."
+                            )
+                            .contentShape(Rectangle())
+                            
+                            FeatureCard(
+                                icon: "bubble.left.and.text.bubble.right.fill",
+                                iconColor: .green,
+                                title: "Explore Conversations",
+                                description: "Discover amazing posts and participate in relevant conversations."
+                            )
+                            .contentShape(Rectangle())
+                            
+                            FeatureCard(
+                                icon: "person.3.fill",
+                                iconColor: .purple,
+                                title: "Connect",
+                                description: "Meet people with similar interests and expand your network."
+                            )
+                            .contentShape(Rectangle())
                         }
                         .padding(.horizontal)
-                    } else {
-                        Button(action: {
-                            showAuthSheet = true
-                        }) {
-                            Label("Join Now", systemImage: "pencil.tip")
-                                .font(.title3)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(12)
+
+                        // MARK: - Main Button
+                        if session.isAuthenticated {
+                            Button(action: {
+                                selectedScreen = .posts
+                            }) {
+                                Label("Explore Posts", systemImage: "bubble.left.and.bubble.right")
+                                    .font(.title3)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(12)
+                            }
+                            .padding(.horizontal)
+                        } else {
+                            Button(action: {
+                                showAuthSheet = true
+                            }) {
+                                Label("Join Now", systemImage: "pencil.tip")
+                                    .font(.title3)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .cornerRadius(12)
+                            }
+                            .padding(.horizontal)
                         }
-                        .padding(.horizontal)
                     }
+                    .frame(minHeight: proxy.size.height, alignment: .top)
+                    .padding(.top, 40)
                 }
-                 .padding(.vertical, 40)
             }
         }
     }

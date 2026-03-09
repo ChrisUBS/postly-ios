@@ -100,6 +100,7 @@ struct EditPostView: View {
                                     }
                                     .padding(8)
                                 }
+                                .contentShape(Rectangle())
                             }
                         }
                         
@@ -119,28 +120,31 @@ struct EditPostView: View {
                             } else {
                                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 10) {
                                     ForEach(recommendedImages) { image in
-                                        VStack(spacing: 6) {
-                                            AsyncImage(url: URL(string: image.src.medium)) { img in
-                                                img.resizable().scaledToFill()
-                                            } placeholder: {
-                                                ProgressView()
-                                            }
-                                            .frame(height: 90)
-                                            .clipped()
-                                            .cornerRadius(8)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 8)
-                                                    .stroke(selectedImage?.id == image.id ? Color.blue : Color.clear, lineWidth: 2)
-                                            )
-                                            
-                                            Text("By: \(image.photographer)")
-                                                .font(.caption)
-                                                .lineLimit(1)
-                                        }
-                                        .onTapGesture {
+                                        Button {
                                             selectedImage = image
                                             currentCoverImage = nil
+                                        } label: {
+                                            VStack(spacing: 6) {
+                                                AsyncImage(url: URL(string: image.src.medium)) { img in
+                                                    img.resizable().scaledToFill()
+                                                } placeholder: {
+                                                    ProgressView()
+                                                }
+                                                .frame(height: 90)
+                                                .clipped()
+                                                .cornerRadius(8)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 8)
+                                                        .stroke(selectedImage?.id == image.id ? Color.blue : Color.clear, lineWidth: 2)
+                                                )
+                                                
+                                                Text("By: \(image.photographer)")
+                                                    .font(.caption)
+                                                    .lineLimit(1)
+                                            }
+                                            .contentShape(Rectangle())
                                         }
+                                        .buttonStyle(.plain)
                                     }
                                 }
                             }

@@ -57,6 +57,7 @@ struct SearchResultsView: View {
         .padding(.horizontal, 20)
         .padding(.top, 16)
         .padding(.bottom, 32)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .task(id: query) {
             await fetchSearchResults()
         }

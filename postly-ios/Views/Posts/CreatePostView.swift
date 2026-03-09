@@ -79,12 +79,18 @@ struct CreatePostView: View {
                             .frame(height: 200)
                             .clipped()
                             .cornerRadius(12)
-
-                            Button {
-                                selectedImage = nil
-                            } label: {
-                                Text("Remove image")
-                                    .foregroundColor(.red)
+                            .overlay(alignment: .topTrailing) {
+                                Button {
+                                    selectedImage = nil
+                                } label: {
+                                    Image(systemName: "xmark")
+                                        .font(.headline)
+                                        .foregroundColor(.white)
+                                        .padding(10)
+                                        .background(Color.red)
+                                        .clipShape(Circle())
+                                }
+                                .padding(8)
                             }
                         }
                     }
@@ -107,23 +113,26 @@ struct CreatePostView: View {
                                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 10) {
 
                                     ForEach(recommendedImages) { img in
-                                        VStack(spacing: 4) {
-                                            AsyncImage(url: URL(string: img.src.medium)) { img2 in
-                                                img2.resizable().scaledToFill()
-                                            } placeholder: {
-                                                ProgressView()
-                                            }
-                                            .frame(height: 90)
-                                            .clipped()
-                                            .cornerRadius(8)
-                                            .overlay(
-                                                RoundedRectangle(cornerRadius: 8)
-                                                    .stroke(selectedImage?.id == img.id ? Color.blue : Color.clear, lineWidth: 2)
-                                            )
-                                        }
-                                        .onTapGesture {
+                                        Button {
                                             selectedImage = img
+                                        } label: {
+                                            VStack(spacing: 4) {
+                                                AsyncImage(url: URL(string: img.src.medium)) { img2 in
+                                                    img2.resizable().scaledToFill()
+                                                } placeholder: {
+                                                    ProgressView()
+                                                }
+                                                .frame(height: 90)
+                                                .clipped()
+                                                .cornerRadius(8)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 8)
+                                                        .stroke(selectedImage?.id == img.id ? Color.blue : Color.clear, lineWidth: 2)
+                                                )
+                                            }
+                                            .contentShape(Rectangle())
                                         }
+                                        .buttonStyle(.plain)
                                     }
                                 }
                             }
