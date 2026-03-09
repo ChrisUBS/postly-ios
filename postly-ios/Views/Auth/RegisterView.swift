@@ -79,6 +79,7 @@ struct RegisterView: View {
                     .font(.footnote)
             }
             .padding(.top, 10)
+            .padding(.bottom, 50)
             
         }
         .padding()
